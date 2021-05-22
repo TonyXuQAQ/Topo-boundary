@@ -1,6 +1,6 @@
 ## Welcome to Topo-boundary project page
 
-This is the project page of paper "Topo-boundary: A Benchmark Dataset on Topological Road-boundary Detection Using Aerial Images for Autonomous Driving" ([Arxiv](Topo-boundary: A Benchmark Dataset on Topological Road-boundary Detection Using Aerial Images for Autonomous Driving))
+This is the project page of paper "Topo-boundary: A Benchmark Dataset on Topological Road-boundary Detection Using Aerial Images for Autonomous Driving" ([Arxiv](https://arxiv.org/abs/2103.17119))
 
 Authors: Zhenhua Xu, Yuxiang Sun, Ming Liu
 
