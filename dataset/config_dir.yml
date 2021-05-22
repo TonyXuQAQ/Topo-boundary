@@ -1,0 +1,16 @@
+# the dir of Topo-boundary
+docker_home_dir: /home/tony/Topo-boundary/
+# the dir of the dataset
+docker_dataset_dir: /home/tony/Topo-boundary/dataset
+# the name of the docker image
+docker_image_name: zhxu_topoboundary
+
+# the dirs of labels
+image_dir: './dataset/cropped_tiff' # 4-channel aerial image directory
+mask_dir: './dataset/labels/binary_map' # gt binary mask directory
+ori_dir: './dataset/labels/orientation_map' # gt orientation map directory
+instance_mask_dir: './dataset/labels/instance_map' # gt instance mask directory
+seq_dir: './dataset/labels/dense_seq' # gt sequence directory
+sampled_seq_dir: './dataset/labels/sampled_seq' # gt sampled sequence directory for APLS
+inverse_dir: './dataset/labels/inverse_distance_map' # gt inverse distance mask directory
+direction_dir: './dataset/labels/direction_map' # gt direction map directory

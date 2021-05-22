@@ -1,0 +1,7 @@
+*.zip
+*.pth
+*.png
+*.json
+records
+**/__pycache__
+checkpoints

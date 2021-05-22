@@ -1,0 +1,22 @@
+# device 
+device: 'cuda:0'
+
+# training params
+epochs: 2 # number of epochs
+lr_rate: 0.0001 # learning rate
+batch_size: 64
+weight_decay: 0.00001
+visualization: True # whether generate visualizations of the trajectories
+max_length: 30 # max iteration number for each single instance
+teacher_forcing_number: -1 # the number of images train with teacher-forcing in the first epoch
+
+# test
+test: False # whether run inference
+
+# dirs
+checkpoints_dir: './checkpoints/'
+
+# docker 
+docker_sub_dir: graph_based_baselines/VecRoad
+docker_container_name: topo_vecRoad
+docker_port_number: 5005

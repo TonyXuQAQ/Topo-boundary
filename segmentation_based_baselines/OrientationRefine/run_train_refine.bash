@@ -1,0 +1,1 @@
+python train_refine.py # --pretrain True

@@ -1,0 +1,1 @@
+tensorboard --logdir ./records/tensorboard/reason --port 6006 --bind_all

@@ -1,0 +1,1 @@
+tensorboard --logdir ./records/tensorboard/refine --port 6006 --bind_all

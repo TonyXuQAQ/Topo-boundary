@@ -1,0 +1,7 @@
+FROM pytorch/pytorch:1.7.0-cuda11.0-cudnn8-runtime
+RUN pip install yacs matplotlib scikit-image seaborn sklearn tensorflow tensorboardX opencv-python gdown
+RUN apt-get update
+RUN apt-get install -y libglib2.0-0 libsm6 libxext6 libxrender1 libgl1-mesa-glx
+RUN pip install shyaml
+
+WORKDIR /topoBoundary

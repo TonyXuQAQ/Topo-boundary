@@ -1,0 +1,1 @@
+python train_seg.py --batch_size 5 --epochs 20 --device cuda:0

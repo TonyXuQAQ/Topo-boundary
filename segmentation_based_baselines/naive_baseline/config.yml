@@ -1,0 +1,18 @@
+# device 
+device: 'cuda:0'
+
+# training params
+epochs: 10 # number of epochs
+batch_size: 1
+lr: 0.0001 # learning rate
+
+# dirs
+checkpoints_dir: './checkpoints/'
+# test
+test: False # whether run test
+load_checkpoint: './checkpoints/naive_baseline_9.pth' # if test is True, load the checkpoint
+
+# docker 
+docker_sub_dir: segmentation_based_baselines/naive_baseline
+docker_container_name: topo_naive
+docker_port_number: 5001

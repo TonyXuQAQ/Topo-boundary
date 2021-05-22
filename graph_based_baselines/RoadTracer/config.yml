@@ -1,0 +1,22 @@
+# device 
+device: 'cuda:0'
+
+# training params
+epochs: 3 # number of epochs
+lr_rate: 0.0001 # learning rate
+weight_decay: 0.00001
+pretrain: False # whether pretrain by teacher-forcing
+batch_size: 512 # buffer size, modify it based on your GPU memory size
+max_length: 120 # max iteration number for each single instance
+visualization: True # whether generate visualizations of the trajectories
+
+# test
+test: False # whether run inference 
+
+# dirs
+checkpoints_dir: './checkpoints/'
+
+# docker 
+docker_sub_dir: graph_based_baselines/RoadTracer
+docker_container_name: topo_roadTracer
+docker_port_number: 5004

@@ -1,0 +1,32 @@
+seg:
+  # =========== seg_net =================
+  # training params
+  device: 'cuda:0'
+  epochs: 10 # number of epochs
+  batch_size: 1
+  lr: 0.0001 # learning rate
+  weight_decay: 0.00001
+  mode: 'train' # "train": train the segmentation network with pretrain patches
+                # "infer_train": infer train patches with the segmentation network
+                # "infer_valid": infer valid patches with the segmentation network
+                # "infer_test": infer test patches with the segmentation network
+  load_checkpoint: './checkpoints/seg_9.pth'  # if test is True, load the checkpoint
+
+reason:
+  # =========== reason_net ===============
+  # training params
+  # reason_net:
+  device: 'cuda:0'
+  epochs: 10
+  batch_size: 64
+  lr: 0.0001
+  weight_decay: 0.00001
+  mode: 'train' # 2 options, train the network or test the network
+  load_checkpoint: './checkpoints/reason_9.pth'
+
+# dirs
+checkpoints_dir: './checkpoints/'
+# docker 
+docker_sub_dir: segmentation_based_baselines/DeepRoadMapper
+docker_container_name: topo_DeepRoadMapper
+docker_port_number: 5002

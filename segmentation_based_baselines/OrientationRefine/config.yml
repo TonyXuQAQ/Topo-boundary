@@ -1,0 +1,34 @@
+
+seg:
+  # =========== seg_net =================
+  # training params
+  device: 'cuda:0'
+  epochs: 10 # number of epochs
+  batch_size: 2
+  lr: 0.0005 # learning rate
+  weight_decay: 0.00001
+  mode: 'train' # "train": train the segmentation network with pretrain patches
+                # "infer_train": infer train patches with the segmentation network
+                # "infer_valid": infer valid patches with the segmentation network
+                # "infer_test": infer test patches with the segmentation network
+  load_checkpoint: './checkpoints/seg_8.pth'  # if test is True, load the checkpoint
+
+refine:
+  # =========== refine_net ===============
+  # training params
+  # refine_net:
+  device: 'cuda:0'
+  epochs: 10
+  batch_size: 5
+  lr: 0.0001
+  weight_decay: 0.00001
+  mode: 'train' # 2 options, train the network or test the network
+  pretrain: False # whether pretrain
+  load_checkpoint: './checkpoints/refine_9.pth'
+
+# dirs
+checkpoints_dir: './checkpoints/'
+# docker 
+docker_sub_dir: segmentation_based_baselines/OrientationRefine
+docker_container_name: topo_ImproveConnectivity
+docker_port_number: 5003
