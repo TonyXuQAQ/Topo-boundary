@@ -36,10 +36,10 @@ python ./scripts/split_data.py
 
 
 ## Set your directories
-```config_dir.yml``` records the file directories. You should set the directory based on your own conditions.
+```config_dir.yml``` records the file directories. You should set the directory based on your own condition.
 
 ## Generate the inverse distance map and direction map
-Since the inverse distance map and direction map are really huge so that we only provide the CUDA code to generate it without uploading it online. **Note** that this label is only for ConvBoundary baseline. 
+Since the inverse distance map and direction map are really huge so that we only provide the CUDA code to generate it without uploading it online. **Note** that these two labels are only for ConvBoundary baseline. 
 
 If you are interested in this baseline model, run 
 ```

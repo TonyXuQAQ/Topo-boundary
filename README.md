@@ -9,6 +9,8 @@ This dataset is based on [NYC Planimetric Database](https://github.com/CityOfNew
 
 We also provide the implementation code (including training and inference) based on *PyTorch* of 9 methods. Go to the Implementation section for details.
 
+<img src=./dataset/pic.png width="100%" height="100%">
+
 ## Update
 * May/22/2021 *Topo_boundary* is released. More time is needed to prepare **ConvBoundary**, **DAGMapper** and **Enhanced-iCurb**, thus currently these models are not open-sourced.
 
