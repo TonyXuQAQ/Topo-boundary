@@ -13,7 +13,7 @@ This dataset is for topological road-boundary detection in aerial images for aut
 
 This dataset is based on the GIS database [NYC Planimetric Database](https://github.com/CityOfNewYork/nyc-planimetrics/blob/master/Capture_Rules.md).
 
-<img src=https://github.com/TonyXuQAQ/Topo-boundary/blob/master/dataset/pic.png width="100%" height="100%">
+![](https://github.com/TonyXuQAQ/Topo-boundary/blob/master/dataset/pic.png)
 
 ### Supplementary
 [Supplementary document](https://github.com/TonyXuQAQ/Topo-boundary/blob/master/dataset/topoboundary_supplementary.pdf) provides more details about the evaluation metrics and data structure.
