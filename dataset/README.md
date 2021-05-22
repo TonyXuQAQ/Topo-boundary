@@ -26,8 +26,8 @@ chmod +x ./get_data.bash
 ```
 In case the script fails, you can download and unzip the data manually [aerial image data](https://drive.google.com/file/d/1xasG1LEeBuB-MmdiMGaX1jgZN8ThW3Jd/view?usp=sharing), [labels](https://drive.google.com/file/d/1XoAjhkwbO6IaYURikrKteA17NVlLoyf8/view?usp=sharing).
 
-## Dataset partitioning
- ```data_split.json``` defines how the dataset is split into pretrain/train/valid/test. They are randomly split. It is recommended to use our provided data partitioning file.
+## Dataset splitting
+ ```data_split.json``` defines how the dataset is split into pretrain/train/valid/test. They are randomly split. It is recommended to use our provided data splitting file.
  
 You can generate a new data split file by yourself by running
 ```
