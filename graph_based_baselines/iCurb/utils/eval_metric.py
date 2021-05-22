@@ -407,12 +407,12 @@ def latex(file_name):
 
 def main():
     print('------------ Starting evaluation... ------------')
-    # print(baseline_name)
-    # simplify_graph()
-    # thr_eval(baseline_name)
-    # entropy_conn(baseline_name)
-    # APLS(baseline_name)
-    # print('Finish evaluation!')
+    print(baseline_name)
+    simplify_graph()
+    thr_eval(baseline_name)
+    entropy_conn(baseline_name)
+    APLS(baseline_name)
+    print('Finish evaluation!')
     latex(baseline_name)
 
 if __name__=='__main__':

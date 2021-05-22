@@ -1,5 +1,5 @@
 # device 
-device: 'cuda:0'
+device: 'cuda:1'
 
 # training params
 epochs: 3 # number of epochs

@@ -1,6 +1,6 @@
 gdown https://drive.google.com/uc?id=1OT8Vrj1QiT7zFgu-D4ZcN4dRR62U31CL
 unzip -d ./ pretrain_checkpoints.zip
-rm -rf ./pretrain_checkpoints.zip
+rm -rf y./pretrain_checkpoints.zip
 
 mkdir -p ../segmentation_based_baselines/naive_baseline/checkpoints
 cp ./pretrain_checkpoints/naive_baseline/* ../segmentation_based_baselines/naive_baseline/checkpoints/
