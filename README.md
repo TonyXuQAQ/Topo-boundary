@@ -12,6 +12,7 @@ We also provide the implementation code (including training and inference) based
 <img src=./dataset/pic.png width="100%" height="100%">
 
 ## Update
+* May/27/2021 The code of **Enhanced-iCurb** has been cleaned and released.
 * May/22/2021 *Topo_boundary* is released. More time is needed to prepare **ConvBoundary**, **DAGMapper** and **Enhanced-iCurb**, thus currently these models are not open-sourced.
 
 ## Platform information
@@ -28,9 +29,26 @@ Software info
 Ubuntu 18.04
 CUDA 11.2
 Docker 20.10.1
+Nvidia-driver 460.73.01
 ```
 Make sure you have Docker installed.
 
+## Environment and Docker
+Docker is used to set up the environment. If you are not familiar with Docker, refer to [install Docker](https://docs.docker.com/engine/install/ubuntu/) and [Docker beginner tutorial](https://docker-curriculum.com/) for more information.
+
+To build the Docker image, run:
+```
+# go to the directory
+cd ./docker
+# optional
+chmod +x ./build_image.sh
+# build the Docker image
+./build_image.sh
+```
+The image is based on the Docker image ```pytorch/pytorch:1.7.0-cuda11.0-cudnn8-runtime``` provided on Docker hub. You may use other base image at [Pytorch_Docker_hub](https://hub.docker.com/r/pytorch/pytorch/tags?page=1&ordering=last_updated) based on your own preference.
+
+To build Docker containers, check ```./build_container.bash``` under the directory of each baseline.
+ 
 ## File structure
 ```
 Topo-Boundary
@@ -60,18 +78,6 @@ Topo-Boundary
 |   ├── OrientationRefine
 |   └── naive_baseline
 |
-```
-## Environment and Docker
-Docker is used to set up the environment. If you are not familiar with Docker, refer to [install Docker](https://docs.docker.com/engine/install/ubuntu/) and [Docker beginner tutorial](https://docker-curriculum.com/) for more information.
-
-To build the docker image, run:
-```
-# go to the directory
-cd ./docker
-# optional
-chmod +x ./build_image.sh
-# build the docker image
-./build_image.sh
 ```
 
 ## Data and pretrain checkpoints preparation

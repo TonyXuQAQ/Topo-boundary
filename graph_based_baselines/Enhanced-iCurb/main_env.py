@@ -1,8 +1,8 @@
 import time
 import numpy as np
 import torch
-import os
 import math
+import os
 import random
 from torch import optim
 from tensorboardX import SummaryWriter
@@ -11,7 +11,8 @@ from torch.nn import CrossEntropyLoss, MSELoss, BCELoss, L1Loss, BCEWithLogitsLo
 from scipy.spatial import cKDTree
 import torch.nn.functional as F
 from PIL import Image, ImageDraw
-import math
+from scipy import ndimage
+from skimage import measure
 
 from utils.dataset import DatasetiCurb,DatasetDagger
 from models.models_encoder import FPN
@@ -31,7 +32,6 @@ class Environment(FrozenClass):
     def __init__(self,args):
         self.args = args
         self.crop_size = 63
-        # self.records_dir = 'r{}_f{}'.format(args.r_exp,args.f_exp)
         self.agent = Agent(self)
         self.network = Network(self)
         # recordings
@@ -54,6 +54,7 @@ class Environment(FrozenClass):
         np.random.seed(seed)
         random.seed(seed)
         torch.backends.cudnn.deterministic = True
+        
     def init_image(self,valid=False):
         self.graph_record = torch.zeros(1,1,1000,1000).to(self.args.device)
     
@@ -82,61 +83,9 @@ class Environment(FrozenClass):
             for i in range(0,N):
                 p = p + s
                 graph[:,:,int(round(p[0])),int(round(p[1]))] = 1
-
-    def expert_restricted_exploration(self,pre_coord,cropped_feature_tensor,thr = 15):
-        r'''
-            Based on the cropped region and coord prediction, find the vertex among the 
-            gt pixels as the expert demonstration to train iCurb.
-        '''
-        # coord convert
-        pre_coord = self.agent.train2world(pre_coord.cpu().detach().numpy())
-        # next vertex for updating
-        v_next = pre_coord
-        self.agent.taken_stop_action = 0
-        self.agent.gt_stop_action = 0
-
-        # generate the expert demonstration for coord prediction
-        if self.agent.tree is not None:
-            dd, ii = self.agent.tree.query([pre_coord],k=[1])
-            dd = dd[0]
-            ii = ii[0]
-            gt_coord = self.agent.candidate_label_points[int(ii)].copy()
-            gt_index = next((i for i, val in enumerate(self.agent.instance_vertices) if np.all(val==gt_coord)), -1)
-            self.agent.ii = gt_index
-            if dd < thr:
-                self.update_graph(self.agent.v_now,pre_coord,self.graph_record)
-            else:
-                # expert demonstration for updating
-                self.update_graph(self.agent.v_now,gt_coord,self.graph_record)
-                v_next = gt_coord.copy()
-        else:
-            self.agent.gt_stop_action = 1
-            self.agent.taken_stop_action = 1
-            # whether reach the end vertex
-            if (np.linalg.norm(np.array(self.agent.v_now) - np.array(self.agent.end_vertex))<15):
-                gt_coord = self.agent.end_vertex.copy()
-                self.update_graph(self.agent.v_now,gt_coord,self.graph_record)
-                self.agent.candidate_label_points = [gt_coord]
-
-        # save data
-        v_now_save = [x/1000 for x in self.agent.v_now]
-        v_previous_save = [x/1000 for x in self.agent.v_previous]
-        stored_data =  {'ahead_vertices':self.agent.candidate_label_points,
-            'cropped_feature_tensor':cropped_feature_tensor,
-            'crop_info':self.agent.crop_info,
-            'gt_stop_action':self.agent.gt_stop_action,
-            'v_now':v_now_save,
-            'v_previous':v_previous_save}
-        
-        self.update_DAgger_buffer(stored_data)
-
-        # update
-        self.agent.v_previous = self.agent.v_now
-        self.agent.v_now = v_next
-        
-
-
-    def expert_free_exploration(self,pre_coord,cropped_feature_tensor):
+    
+    def expert_restricted_exploration(self,pre_coord,cropped_feature_tensor,orientation_map,correction=False):
+        crop_size = self.crop_size
         # coord convert
         pre_coord = self.agent.train2world(pre_coord.cpu().detach().numpy())
         # next vertex for updating
@@ -146,33 +95,197 @@ class Environment(FrozenClass):
         self.agent.gt_stop_action = 0
         
         # generate the expert demonstration for coord prediction
-        if self.agent.tree:
-            dd, ii = self.agent.tree.query([pre_coord],k=[1])
-            dd = dd[0]
-            ii = ii[0]
-            gt_coord = self.agent.candidate_label_points[int(ii)].copy()
-            gt_index = next((i for i, val in enumerate(self.agent.instance_vertices) if np.all(val==gt_coord)), -1)
-            # update history points (past points)
-            if (self.agent.ii <= self.agent.pre_ii):
+        if len(self.agent.candidate_label_points):
+            l,d,r,u,_,_ = self.agent.crop_info
+            # load data
+            candidate_label_points = self.agent.candidate_label_points.copy()
+            candidate_label_points_index = candidate_label_points[:,2]
+            candidate_label_points = candidate_label_points[:,:2]
+            # filter points
+            candidate_label_points_index_1 = candidate_label_points_index[:-1]
+            candidate_label_points_index_2 = candidate_label_points_index[1:]
+            # if only one candidate instances in the cropped region, all elements in delta should be 1
+            delta = candidate_label_points_index_2 - candidate_label_points_index_1
+            delta = (delta==1)
+            filtered_index = [x for x in range(len(delta)) if delta[x]!=1]
+            # if delta is not 1, it means a instance is cut into multiple pieces by the crop action
+            # only save the piece that the current vertex can reach
+            if len(filtered_index):
+                candidate_label_points = candidate_label_points[:filtered_index[0]+1]
+            # generate label
+            tree = cKDTree(candidate_label_points)
+            _, iis = tree.query([self.agent.v_now],k=[1])
+            iis = iis[0][0]
+            v_center = candidate_label_points[iis]
+            candidate_label_points = candidate_label_points[iis:]
+            # 
+            cropped_ahead_points = (candidate_label_points[:,0]>=max(d,v_center[0]-15)) * (candidate_label_points[:,0]<min(u,v_center[0]+15)) * \
+                            (candidate_label_points[:,1] >=max(l,v_center[1]-15)) * (candidate_label_points[:,1] <min(r,v_center[1]+15))
+            points_index = np.where(cropped_ahead_points==1)
+            candidate_label_points = candidate_label_points[points_index]
+            if not len(candidate_label_points):
                 self.agent.gt_stop_action = 1
-            self.agent.pre_ii = self.agent.ii
-            self.agent.ii = gt_index
-            
+                gt_coord = None
+                if (np.linalg.norm(np.array(self.agent.v_now) - np.array(self.agent.end_vertex))<10):
+                    self.agent.taken_stop_action = 1
+                    gt_coord = self.agent.end_vertex.copy()
+                    self.agent.candidate_label_points = [gt_coord]
+            else:
+                orientation = [orientation_map[int(x[0]),int(x[1])] for x in candidate_label_points]
+                ori_now = orientation_map[int(v_center[0]),int(v_center[1])]
+                if ori_now > 1:
+                    ori_now_left = ori_now - 1
+                else:
+                    ori_now_left = 64
+                if ori_now != 64:
+                    ori_now_right = ori_now + 1
+                else:
+                    ori_now_right = 1
+                # locate corner pixels (pixels whose orientation is +/- 5 degree)
+                gt_candiate = np.where((orientation!=ori_now)*(orientation!=ori_now_left)*(orientation!=ori_now_right))[0]
+                if len(gt_candiate):
+                    gt_coord = candidate_label_points[min(len(candidate_label_points)-1,min(gt_candiate)+5)]
+                else:
+                    gt_coord = candidate_label_points[len(candidate_label_points)-1]
+                
+                dd = np.linalg.norm(gt_coord - pre_coord)
+                gt_index = next((i for i, val in enumerate(self.agent.instance_vertices) if np.all(val==gt_coord)), -1)
+                if (self.agent.ii <= self.agent.pre_ii):
+                    self.agent.gt_stop_action = 1
+                self.agent.pre_ii = self.agent.ii
+                self.agent.ii = gt_index  
+
+                if dd > 15:
+                    v_next = gt_coord.copy()
         else:
             self.agent.gt_stop_action = 1
             # whether reach the end vertex
-            if (np.linalg.norm(np.array(self.agent.v_now) - np.array(self.agent.end_vertex))<15):
+            gt_coord = None
+            if (np.linalg.norm(np.array(self.agent.v_now) - np.array(self.agent.end_vertex))<10):
                 self.agent.taken_stop_action = 1
                 gt_coord = self.agent.end_vertex.copy()
                 self.agent.candidate_label_points = [gt_coord]
-            
+        if gt_coord is not None:
+            gt_coord[0] -= self.agent.crop_info[4]
+            gt_coord[1] -= self.agent.crop_info[5]
+            gt_coord = [x/(self.crop_size//2) for x in gt_coord]
+        else:
+            gt_coord = [-3,-3]
         self.update_graph(self.agent.v_now,v_next,self.graph_record)
         # save data
         v_now_save = [x/1000 for x in self.agent.v_now]
         v_previous_save = [x/1000 for x in self.agent.v_previous]
-        stored_data =  {'ahead_vertices':self.agent.candidate_label_points,
+        stored_data =  {
             'cropped_feature_tensor':cropped_feature_tensor,
-            'crop_info':self.agent.crop_info,
+            'gt_coord':gt_coord,
+            'gt_stop_action':self.agent.gt_stop_action,
+            'v_now':v_now_save,
+            'v_previous':v_previous_save}
+
+        self.update_DAgger_buffer(stored_data)
+        
+        # update
+        self.agent.v_previous = self.agent.v_now
+        self.agent.v_now = v_next
+        
+
+
+    def expert_free_exploration(self,pre_coord,cropped_feature_tensor,orientation_map,correction=False):
+        crop_size = self.crop_size
+        # coord convert
+        pre_coord = self.agent.train2world(pre_coord.cpu().detach().numpy())
+        # next vertex for updating
+        v_next = pre_coord
+        # initialization
+        self.agent.taken_stop_action = 0
+        self.agent.gt_stop_action = 0
+        
+        # generate the expert demonstration for coord prediction
+        if len(self.agent.candidate_label_points):
+            l,d,r,u,_,_ = self.agent.crop_info
+            # load data
+            candidate_label_points = self.agent.candidate_label_points.copy()
+            candidate_label_points_index = candidate_label_points[:,2]
+            candidate_label_points = candidate_label_points[:,:2]
+            # filter points
+            candidate_label_points_index_1 = candidate_label_points_index[:-1]
+            candidate_label_points_index_2 = candidate_label_points_index[1:]
+            # if only one candidate instances in the cropped region, all elements in delta should be 1
+            delta = candidate_label_points_index_2 - candidate_label_points_index_1
+            delta = (delta==1)
+            filtered_index = [x for x in range(len(delta)) if delta[x]!=1]
+            # if delta is not 1, it means a instance is cut into multiple pieces by the crop action
+            # only save the piece that the current vertex can reach
+            if len(filtered_index):
+                candidate_label_points = candidate_label_points[:filtered_index[0]+1]
+            # generate label
+            tree = cKDTree(candidate_label_points)
+            _, iis = tree.query([self.agent.v_now],k=[1])
+            iis = iis[0][0]
+            v_center = candidate_label_points[iis]
+            candidate_label_points = candidate_label_points[iis:]
+            # 
+            cropped_ahead_points = (candidate_label_points[:,0]>=max(d,v_center[0]-15)) * (candidate_label_points[:,0]<min(u,v_center[0]+15)) * \
+                            (candidate_label_points[:,1] >=max(l,v_center[1]-15)) * (candidate_label_points[:,1] <min(r,v_center[1]+15))
+            points_index = np.where(cropped_ahead_points==1)
+            candidate_label_points = candidate_label_points[points_index]
+            if not len(candidate_label_points):
+                self.agent.gt_stop_action = 1
+                gt_coord = None
+                if (np.linalg.norm(np.array(self.agent.v_now) - np.array(self.agent.end_vertex))<10):
+                    self.agent.taken_stop_action = 1
+                    gt_coord = self.agent.end_vertex.copy()
+                    self.agent.candidate_label_points = [gt_coord]
+            else:
+                orientation = [orientation_map[int(x[0]),int(x[1])] for x in candidate_label_points]
+                ori_now = orientation_map[int(v_center[0]),int(v_center[1])]
+                if ori_now > 1:
+                    ori_now_left = ori_now - 1
+                else:
+                    ori_now_left = 64
+                if ori_now != 64:
+                    ori_now_right = ori_now + 1
+                else:
+                    ori_now_right = 1
+                # locate corner pixels (pixels whose orientation is +/- 5 degree)
+                gt_candiate = np.where((orientation!=ori_now)*(orientation!=ori_now_left)*(orientation!=ori_now_right))[0]
+                if len(gt_candiate):
+                    gt_coord = candidate_label_points[min(len(candidate_label_points)-1,min(gt_candiate)+5)]
+                else:
+                    gt_coord = candidate_label_points[len(candidate_label_points)-1]
+                
+                # dd = np.linalg.norm(gt_coord - pre_coord)
+                gt_index = next((i for i, val in enumerate(self.agent.instance_vertices) if np.all(val==gt_coord)), -1)
+                if (self.agent.ii <= self.agent.pre_ii):
+                    self.agent.gt_stop_action = 1
+                self.agent.pre_ii = self.agent.ii
+                self.agent.ii = gt_index  
+
+                if correction and self.epoch_counter==1:
+                    beta = 0.5**(self.training_step/1000)
+                    v_next = (np.array(v_next) * (1 - beta) + np.array(gt_coord) * beta)
+                    v_next = [int(v_next[0]),int(v_next[1])]
+        else:
+            self.agent.gt_stop_action = 1
+            # whether reach the end vertex
+            gt_coord = None
+            if (np.linalg.norm(np.array(self.agent.v_now) - np.array(self.agent.end_vertex))<10):
+                self.agent.taken_stop_action = 1
+                gt_coord = self.agent.end_vertex.copy()
+                self.agent.candidate_label_points = [gt_coord]
+        if gt_coord is not None:
+            gt_coord[0] -= self.agent.crop_info[4]
+            gt_coord[1] -= self.agent.crop_info[5]
+            gt_coord = [x/(self.crop_size//2) for x in gt_coord]
+        else:
+            gt_coord = [-3,-3]
+        self.update_graph(self.agent.v_now,v_next,self.graph_record)
+        # save data
+        v_now_save = [x/1000 for x in self.agent.v_now]
+        v_previous_save = [x/1000 for x in self.agent.v_previous]
+        stored_data =  {
+            'cropped_feature_tensor':cropped_feature_tensor,
+            'gt_coord':gt_coord,
             'gt_stop_action':self.agent.gt_stop_action,
             'v_now':v_now_save,
             'v_previous':v_previous_save}
@@ -194,6 +307,8 @@ class Agent(FrozenClass):
         self.taken_stop_action = 0
         self.gt_stop_action = 0
         self.agent_step_counter = 0
+        self.local_loop_repeat_counter = 0
+        self.empty_crop_repeat_counter = 0
         #
         self.instance_vertices = np.array([])
         self.candidate_label_points = np.array([])
@@ -214,6 +329,8 @@ class Agent(FrozenClass):
         self.v_previous = init_vertex
         self.ii = 0
         self.pre_ii = -1
+        self.local_loop_repeat_counter = 0
+        self.empty_crop_repeat_counter = 0
         
     def train2world(self,coord_in,crop_info=None):
         if crop_info is None:
@@ -256,14 +373,15 @@ class Agent(FrozenClass):
         # update the gt pixels within the cropped region
         if not val_flag:
             ahead_points = self.instance_vertices[self.ii:]
+            ahead_points = np.array([[x[0],x[1],i] for i,x in enumerate(ahead_points)])
             cropped_ahead_points = (ahead_points[:,0]>=d) * (ahead_points[:,0]<u) * (ahead_points[:,1] >=l) * (ahead_points[:,1] <r)
             points_index = np.where(cropped_ahead_points==1)
             cropped_ahead_points = ahead_points[points_index]
-            self.candidate_label_points = [x for x in cropped_ahead_points if (((x[0] - self.v_now[0])**2 + (x[1]- self.v_now[1])**2)**0.5>15)]
-            if len(self.candidate_label_points):
-                self.tree = cKDTree(self.candidate_label_points)
-            else:
-                self.tree = None
+            self.candidate_label_points = cropped_ahead_points#[x for x in cropped_ahead_points if (((x[0] - self.v_now[0])**2 + (x[1]- self.v_now[1])**2)**0.5>15)]
+            # if len(self.candidate_label_points):
+            #     self.tree = cKDTree(self.candidate_label_points)
+            # else:W
+            #     self.tree = None
         return cropped_feature_tensor.to(self.args.device)
     
     
@@ -279,7 +397,6 @@ class Network(FrozenClass):
         self.encoder.to(device=self.args.device)
         self.decoder_coord.to(device=self.args.device)
         self.decoder_stop.to(device=self.args.device)
-        print(self.args.device)
         # tensorboard
         if not self.args.test:
             self.writer = SummaryWriter('./records/tensorboard')
@@ -307,11 +424,12 @@ class Network(FrozenClass):
     def load_checkpoints(self):
         self.encoder.load_state_dict(torch.load('./checkpoints/seg_pretrain.pth',map_location='cpu'))
         if self.args.test:
-            self.decoder_coord.load_state_dict(torch.load("./checkpoints/decoder_nodis_coord_best.pth",map_location='cpu'))
-            self.decoder_stop.load_state_dict(torch.load("./checkpoints/decoder_nodis_flag_best.pth",map_location='cpu'))
+            self.decoder_coord.load_state_dict(torch.load("./records/checkpoints/decoder_nodis_coord_best.pth",map_location='cpu'))
+            self.decoder_stop.load_state_dict(torch.load("./records/checkpoints/decoder_nodis_flag_best.pth",map_location='cpu'))
             print('=============')
             print('Successfully loading iCurb checkpoints!')
         
+        # self.decoder_seg.load_state_dict(torch.load('./dataset/pretrain_mask_decoder_19.pth',map_location='cpu'))
         print('=============')
         print('Pretrained FPN encoder checkpoint loaded!')
     
@@ -339,31 +457,31 @@ class Network(FrozenClass):
 
     def save_checkpoints(self,i):
         print('Saving checkpoints {}.....'.format(i))
-        torch.save(self.decoder_coord.state_dict(), "./checkpoints/decoder_nodis_coord_best.pth")
-        torch.save(self.decoder_stop.state_dict(), "./checkpoints/decoder_nodis_flag_best.pth")
+        torch.save(self.decoder_coord.state_dict(), "./records/checkpoints/decoder_nodis_coord_best.pth")
+        torch.save(self.decoder_stop.state_dict(), "./records/checkpoints/decoder_nodis_flag_best.pth")
 
 
     def DAgger_collate(self,batch):
-        # variables as list
-        crop_info = [x[3].tolist() for x in batch]
-        cropped_point = [x[4].tolist() for x in batch]
         # variables as tensor
         cat_tiff = torch.stack([x[0] for x in batch])
         v_now = torch.stack([x[1] for x in batch])
         v_previous = torch.stack([x[2] for x in batch])
+        gt_coord = torch.stack([x[3] for x in batch])
         gt_stop_action = torch.stack([x[-1] for x in batch]).reshape(-1)
-        return cat_tiff, v_now, v_previous, crop_info, cropped_point, gt_stop_action
+        
+        return cat_tiff, v_now, v_previous, gt_coord, gt_stop_action
 
     def iCurb_collate(self,batch):
         # variables as numpy
         seq = np.array([x[0] for x in batch])
         mask = np.array([x[3] for x in batch])
+        orientation_map = np.array([x[4] for x in batch])
         # variables as list
         seq_lens = [x[1] for x in batch]
-        image_name = [x[4] for x in batch]
-        init_points = [x[5] for x in batch]
-        end_points = [x[6] for x in batch]
+        image_name = [x[5] for x in batch]
+        init_points = [x[6] for x in batch]
+        end_points = [x[7] for x in batch]
         # variables as tensor
         tiff = torch.stack([x[2] for x in batch])
-        return seq, seq_lens, tiff, mask, image_name, init_points, end_points
+        return seq, seq_lens, tiff, mask, orientation_map, image_name, init_points, end_points
 

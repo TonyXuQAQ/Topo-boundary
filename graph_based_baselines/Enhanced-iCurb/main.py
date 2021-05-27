@@ -1,25 +1,19 @@
-import sys
-from arguments import *
+from arguments import get_parser, update_dir
 from main_train import run_train
 from main_val import run_val
 from main_env import Environment
-import time 
+import time
 
 def main():
     parser = get_parser()
     args = parser.parse_args()
-    if not args.test:
-        update_dir(args)
-    else:
-        update_test_dir(args)
+    update_dir(args)
     print('===================== Parameters =======================')
     print('Device: {}'.format(args.device))
     print('Batch size: {}'.format(args.batch_size))
     print('Epoch number: {}'.format(args.epochs))
     print('Learning rate: {} || Decay rate: {}'.format(args.lr_rate,args.weight_decay))
-    print('Restricted exploration rounds: {}'.format(args.r_exp))
-    print('Free exploration rounds: {}'.format(args.f_exp))
-    print('===================== Starting iCurb =======================')
+    print('===================== Starting Enhanced-iCurb =======================')
     env = Environment(args)
     if args.test:
         time_start = time.time()
@@ -41,6 +35,5 @@ def main():
                 # training mode
                 env.network.train_mode()
                 run_train(env,data,iCurb_image_index)
-                
 if __name__ == "__main__":
     main()
