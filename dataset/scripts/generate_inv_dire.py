@@ -74,8 +74,8 @@ for ii, seq in enumerate(seq_list):
     dds = cuda_label(np.array(init_whole),np.array(end_whole),grid)
     dis_map = dds.reshape(1000,1000).T
     # print(dis_map)
-    # inv_dis_map = np.array(1 / dis_map)
-    # Image.fromarray(inv_dis_map*255).convert('RGB').save('./labels/inverse_distance_map/{}.png'.format(seq[:-5]))
+    inv_dis_map = np.array(1 / dis_map)
+    Image.fromarray(inv_dis_map*255).convert('RGB').save('./labels/inverse_distance_map/{}.png'.format(seq[:-5]))
     #
     dis_map = cv2.GaussianBlur(dis_map,(5,5),0)
     x = cv2.Sobel(dis_map,cv2.CV_16S,1,0,ksize=7)

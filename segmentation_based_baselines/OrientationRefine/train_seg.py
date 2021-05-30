@@ -84,6 +84,7 @@ def train(args,epoch,net,dataloader,train_len,optimizor,criterion,writer,valid_d
             img, mask, ori_mask = img.to(args.device), mask[:,0:1,:,:].type(torch.FloatTensor).to(args.device), ori_mask.to(args.device)
             #
             pre_segs, pre_oris = net(img)
+            
             loss_seg = 0
             loss_seg += criterion['ce'](F.interpolate(pre_segs[0], scale_factor=(4,4), mode='bilinear', align_corners=True),mask)
             loss_seg += criterion['ce'](F.interpolate(pre_segs[1], scale_factor=(4,4), mode='bilinear', align_corners=True),mask)

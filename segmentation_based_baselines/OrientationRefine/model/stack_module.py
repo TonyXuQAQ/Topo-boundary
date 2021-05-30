@@ -156,7 +156,7 @@ class StackHourglassNetMTL(nn.Module):
     def __init__(
         self,
         task1_classes=2,
-        task2_classes=64,
+        task2_classes=65,
         block=BasicResnetBlock,
         in_channels=3,
         num_stacks=2,
