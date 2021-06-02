@@ -424,8 +424,8 @@ class Network(FrozenClass):
     def load_checkpoints(self):
         self.encoder.load_state_dict(torch.load('./checkpoints/seg_pretrain.pth',map_location='cpu'))
         if self.args.test:
-            self.decoder_coord.load_state_dict(torch.load("./records/checkpoints/decoder_nodis_coord_best.pth",map_location='cpu'))
-            self.decoder_stop.load_state_dict(torch.load("./records/checkpoints/decoder_nodis_flag_best.pth",map_location='cpu'))
+            self.decoder_coord.load_state_dict(torch.load("./checkpoints/decoder_nodis_coord_best.pth",map_location='cpu'))
+            self.decoder_stop.load_state_dict(torch.load("./checkpoints/decoder_nodis_flag_best.pth",map_location='cpu'))
             print('=============')
             print('Successfully loading iCurb checkpoints!')
         

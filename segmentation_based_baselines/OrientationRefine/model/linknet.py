@@ -153,7 +153,7 @@ class LinkNet34(nn.Module):
 
 
 class LinkNet34MTL(nn.Module):
-    def __init__(self, in_channels=4,task1_classes=2, task2_classes=64):
+    def __init__(self, in_channels=4,task1_classes=2, task2_classes=65):
         super(LinkNet34MTL, self).__init__()
 
         filters = [64, 128, 256, 512]

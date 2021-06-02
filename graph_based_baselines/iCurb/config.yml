@@ -19,4 +19,4 @@ checkpoints_dir: './checkpoints/'
 # docker 
 docker_sub_dir: /graph_based_baselines/iCurb
 docker_container_name: topo_iCurb
-docker_port_number: 5011
+docker_port_number: 5008
