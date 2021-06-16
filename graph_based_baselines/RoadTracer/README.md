@@ -58,9 +58,11 @@ Then run
 The port number is **5004**.
 
 ### Inference
-Run ```
+Run 
+```
 ./run_eval.bash
-```, the inference would be done with the saved checkpoint. 
+```
+The inference would be done with the saved checkpoint. 
 
 Binary maps of the generated graph are saved in ```./records/test/skeleton```; generated vertices are saved in ```./records/test/vertices_record```. After inference, a script is triggered to calculate the evaluation results of the inference.
 
