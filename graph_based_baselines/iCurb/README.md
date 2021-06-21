@@ -91,6 +91,11 @@ python utils/visualize.py
 Generated visualizations are saved in ```./records/test/final_vis```.
 
 
+Some examples are shown below. Cyan lines are the ground truth. In the predicted road-boundary graph, yellow nodes are vertices and orange lines are edges.
 
+
+<img src=./img/gt_000167_41.png width="25%" height="25%"><img src=./img/gt_000197_22.png width="25%" height="25%"><img src=./img/gt_000160_01.png width="25%" height="25%"><img src=./img/gt_000217_43.png width="25%" height="25%">
+
+<img src=./img/000167_41.png width="25%" height="25%"><img src=./img/000197_22.png width="25%" height="25%"><img src=./img/000160_01.png width="25%" height="25%"><img src=./img/000217_43.png width="25%" height="25%">
 
 

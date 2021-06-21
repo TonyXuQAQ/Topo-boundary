@@ -1,0 +1,22 @@
+# device 
+device: 'cuda:1'
+
+# training params
+epochs: 5 # number of epochs
+lr_rate: 0.0001 # learning rate
+batch_size: 512
+weight_decay: 0.00001
+pretrain : False # pretrain the segmentation network
+max_length: 60 # max iteration number for each single instance
+visualization: True # whether generate visualizations of the trajectories
+
+# dirs
+checkpoints_dir: './checkpoints/'
+
+# test
+test: False # whether run test
+
+# docker 
+docker_sub_dir: graph_based_baselines/DAGMapper
+docker_container_name: topo_DAGMapper
+docker_port_number: 5006
