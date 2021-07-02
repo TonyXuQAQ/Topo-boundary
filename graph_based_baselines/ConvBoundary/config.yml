@@ -1,0 +1,23 @@
+# device 
+device: 'cuda:1'
+
+# training params
+epochs: 3 # number of epochs
+lr_rate: 0.0005 # learning rate
+batch_size: 128
+weight_decay: 0.00001
+max_length: 30 # max iteration number for each single instance
+
+# dirs
+checkpoints_dir: './checkpoints/'
+# test
+mode: 'train' # "train": train the segmentation network with pretrain patches
+              # "infer_train": infer train patches with the segmentation network
+              # "infer_valid": infer valid patches with the segmentation network
+              # "infer_test": infer test patches with the segmentation network
+test: False
+load_checkpoint: 
+# docker 
+docker_sub_dir: graph_based_baselines/ConvBoundary
+docker_container_name: topo_convBoundary
+docker_port_number: 5007

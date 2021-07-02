@@ -1,0 +1,1 @@
+python train_seg.py --batch_size 4 --epochs 15 --lr_rate 0.001 --weight_decay 0.0001

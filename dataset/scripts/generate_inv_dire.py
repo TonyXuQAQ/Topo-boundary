@@ -25,7 +25,7 @@ xx, yy = np.meshgrid(range(1000),range(1000))
 grid = np.array((xx.ravel(), yy.ravel())).T
 device = 'cuda:0'
 so = ctypes.cdll.LoadLibrary 
-lib = so("./cuda.so")  
+lib = so("./scripts/cuda.so")  
 
 def cuda_label(init,end,query):
     query = np.array(query)

@@ -43,6 +43,8 @@ Since the inverse distance map and direction map are really huge so that we only
 
 If you are interested in this baseline model, run 
 ```
+mkdir ./labels/inverse_distance_map
+mkdir ./labels/direction_map
 python ./scripts/generate_inv_dir_maps.py
 ```
 to generate the inverse distance map and the direction map. Note it may take a lot of disk usage.

@@ -111,7 +111,7 @@ def run_free_explore(env,seq,fpn_feature_tensor, seq_lens, mask, orientation_map
                 pre_stop_action = pre_stop_action.squeeze(1)
                 pre_coord = pre_coord.squeeze(0).squeeze(0)
                 
-                env.expert_free_exploration(pre_coord,cropped_feature_tensor,orientation_map,True)
+                env.expert_free_exploration(pre_coord,cropped_feature_tensor,orientation_map)
                 vis_generated_vertices.append(agent.v_now)
                 if (agent.agent_step_counter > args.max_length) \
                     or (((agent.v_now[0]>=999) or (agent.v_now[0]<=0)or (agent.v_now[1]>=999) or (agent.v_now[1]<=0)) and agent.agent_step_counter > 10):
