@@ -6,3 +6,4 @@
 records
 checkpoints
 **/__pycache__
+!img/*
