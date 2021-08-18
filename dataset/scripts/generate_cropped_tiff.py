@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 with open('./data_split.json','r') as jf:
     json_data = json.load(jf)
-tiff_list = json_data['train'] + json_data['valid'] + json_data['test']
+tiff_list = json_data['train'] + json_data['valid'] + json_data['test'] + json_data['pretrain']
 
 jp2_list = os.listdir('./temp_raw_tiff')
 jp2_list = [x for x in jp2_list if x[-3:]=='jp2']
