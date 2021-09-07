@@ -3,6 +3,8 @@ This is the official github repo of paper [Topo-boundary: A Benchmark Dataset on
 
 [Project page](https://tonyxuqaq.github.io/Topo-boundary/).
 
+[Supplementary document](./dataset/topoboundary_supplementary.pdf).
+
 Topo-boundary is a publicly available benchmark dataset for topological road-boundary detection in aerial images. With an aerial image as the input, the evaluated method should predict the topological structure of road boundaries in the form of a graph.
 
 This dataset is based on [NYC Planimetric Database](https://github.com/CityOfNewYork/nyc-planimetrics/blob/master/Capture_Rules.md). Topo-boundary consists of 25,297 4-channel aerial images, and each aerial image has eight labels for different deep-learning tasks. More details about the dataset structure can be found in our paper. Follow the steps in the ```./dataset``` to prepare the dataset.
@@ -15,7 +17,7 @@ We also provide the implementation code (including training and inference) based
 * Aug/12/2021 Fix dataset download bug.
 * Jul/2/2021 This paper is accepted and will appear on *The IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS​) 2021*.
 * Jul/2/2021 The code of **ConvBoundary** has been cleaned and released.
-* Jun/21/2021 This paper is accepted by *IEEE Robotics and Automation (RA-L)*.
+* Jun/21/2021 This paper is accepted by *IEEE Robotics and Automation Letters(RA-L)*.
 * Jun/21/2021 The code of **DAGMapper** has been cleaned and released.
 * May/27/2021 The code of **Enhanced-iCurb** has been cleaned and released.
 * May/22/2021 *Topo_boundary* is released. More time is needed to prepare **ConvBoundary**, **DAGMapper** and **Enhanced-iCurb**, thus currently these models are not open-sourced.
@@ -99,9 +101,9 @@ We evaluate our implementations by 3 relaxed-pixel-level metrics, the self-defin
 ## Related topics
 Other research topics about line-shaped object detection could be inspiring to our task. **Line-shaped object** indicts target objects that have long but thin shapes, and the topology correctness of them also matters a lot. They usually have an irregular shape. E.g., road-network detection, road-lane detection, road-curb detection, line-segment detection, etc. The method to detect one line-shaped object could be adapted to another category without much modification.
 
-## To do
+<!-- ## To do
 - [ ] Acceleration
-- [ ] Fix bugs
+- [ ] Fix bugs -->
 
 ## Contact
 For any questions, please send email to zxubg at connect dot ust dot hk.
