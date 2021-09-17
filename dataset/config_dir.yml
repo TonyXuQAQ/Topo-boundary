@@ -1,7 +1,7 @@
 # the dir of Topo-boundary
-docker_home_dir: /data_shared/Docker/zhxu/Topo-boundary/
+docker_home_dir: /dataset/Topo-boundary/
 # the dir of the dataset
-docker_dataset_dir: /data_shared/Docker/zhxu/Topo-boundary/dataset
+docker_dataset_dir: /dataset/Topo-boundary/dataset
 # the name of the docker image
 docker_image_name: zhxu_topoboundary
 

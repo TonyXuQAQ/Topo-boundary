@@ -11,7 +11,7 @@ visualization: True # whether generate visualizations of the trajectories
 
 # test
 test: False # whether run test
-gt_init_vertex: True # whether use gt initial vertices to start iCurb
+gt_init_vertex: False # whether use gt initial vertices to start iCurb
 
 # dirs
 checkpoints_dir: './checkpoints/'

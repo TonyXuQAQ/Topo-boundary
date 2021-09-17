@@ -50,7 +50,7 @@ pip uninstall pillow
 pip install pillow
 ```
 ## Data label download
-Download and unzip ```labels``. All the data are stored in Google Drive. To download all the data, run
+Download and unzip ```labels```. All the data are stored in Google Drive. To download all the data, run
 ```
 # install gdown
 pip install gdown

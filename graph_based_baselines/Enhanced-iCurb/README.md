@@ -9,6 +9,10 @@ Run
 ``` 
 to create the Docker container. 
 
+## New feature: predicted initial vertices
+
+In past experiments, we directly use gt initial vertices for fair comparison. Now we provide the code to predict initial vertices. Please first generate the initial vertices following steps in ```./graph_baseline_models/init_vertex```, then set ```gt_init_vertex``` in ```config.yml``` as ```False```. If you want to use the gt initial vertices for inference, set ```gt_init_vertex``` as ```True``` (default).
+
 ## Try with saved checkpoint
 Run 
 ```

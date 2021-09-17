@@ -29,5 +29,5 @@ cp ./pretrain_checkpoints/ConvBoundary/* ../graph_based_baselines/ConvBoundary/c
 mkdir -p ../graph_based_baselines/Enhanced-iCurb/checkpoints
 cp ./pretrain_checkpoints/Enhanced-iCurb/* ../graph_based_baselines/Enhanced-iCurb/checkpoints/
 
-mkdir -p ../graph_based_baselines/initial_vertex/checkpoints
-cp ./pretrain_checkpoints/initial_vertex/* ../graph_based_baselines/initial_vertex/checkpoints/
+mkdir -p ../graph_based_baselines/init_vertex/checkpoints
+cp ./pretrain_checkpoints/initial_vertex/* ../graph_based_baselines/init_vertex/checkpoints/
