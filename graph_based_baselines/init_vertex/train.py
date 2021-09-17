@@ -31,6 +31,7 @@ class dataset(Dataset):
         self.file_list = json_list
         self.tiff_list = [os.path.join(args.image_dir,'{}.tiff'.format(x)) for x in self.file_list]
         self.mask_list = [os.path.join(args.mask_dir,'{}.png'.format(x)) for x in self.file_list]
+        self.endpoint_list = [os.path.join(args.endpoint_dir,'{}.png'.format(x)) for x in self.file_list]
         print('Finish loading the training data set lists {}!'.format(len(self.file_list)))
 
     def __len__(self):
@@ -39,7 +40,8 @@ class dataset(Dataset):
     def __getitem__(self,idx):
             tiff = tvf.to_tensor(Image.open(self.tiff_list[idx]))
             mask = tvf.to_tensor(Image.open(self.mask_list[idx]))
-            return tiff,mask
+            endpoint = tvf.to_tensor(Image.open(self.endpoint_list[idx]))
+            return tiff,mask,endpoint
 
 class valid_dataset(Dataset):
     def __init__(self,args):
@@ -48,6 +50,7 @@ class valid_dataset(Dataset):
         self.file_list = json_list['valid'][:500]
         self.tiff_list = [os.path.join(args.image_dir,'{}.tiff'.format(x)) for x in self.file_list]
         self.mask_list = [os.path.join(args.mask_dir,'{}.png'.format(x)) for x in self.file_list]
+        # self.endpoint_list = [os.path.join(args.endpoint_dir,'{}.png'.format(x)) for x in self.file_list]
         print('Finish loading the valid data set lists {}!'.format(len(self.file_list)))
 
     def __len__(self):
@@ -56,6 +59,7 @@ class valid_dataset(Dataset):
     def __getitem__(self,idx):
         tiff = tvf.to_tensor(Image.open(self.tiff_list[idx]))
         mask = tvf.to_tensor(Image.open(self.mask_list[idx]))
+        # endpoint = tvf.to_tensor(Image.open(self.endpoint_list[idx]))
         name = self.file_list[idx]
         return tiff,mask,name 
 
@@ -68,10 +72,10 @@ def train(args,epoch,net,dataloader,train_len,optimizor,criterion,writer,valid_d
     counter = 0
     best_f1 = 0
     for idx,data in enumerate(dataloader):
-        img, mask= data
-        img, mask= img.to(args.device), mask[:,0:1,:,:].type(torch.FloatTensor).to(args.device)
-        predictions,_ = net(img)
-        loss = criterion['bce'](predictions,mask)
+        img, mask, endpoint = data
+        img, mask, endpoint = img.to(args.device), mask[:,0:1,:,:].type(torch.FloatTensor).to(args.device), endpoint[:,0:1,:,:].type(torch.FloatTensor).to(args.device)
+        pred_binary_mask, pred_endpoint_map,_ = net(img)
+        loss = criterion['bce'](pred_binary_mask,mask) + criterion['bce'](pred_endpoint_map,endpoint)
         optimizor.zero_grad()
         loss.backward()
         optimizor.step()
@@ -117,7 +121,7 @@ def val(args,epoch,net,dataloader,ii,val_len,writer,mode=0):
         img, mask, name = data
         img, mask = img.to(args.device), mask[0,0,:,:].cpu().detach().numpy()
         with torch.no_grad():
-            pre_segs,_ = net(img)
+            pre_segs, _, _ = net(img)
             pre_segs = torch.sigmoid(pre_segs[0,0,:,:]).cpu().detach().numpy()
             Image.fromarray(pre_segs/np.max(pre_segs)*255).convert('RGB').save('./records/seg/valid/{}.png'.format(name[0]))
             pre_segs = (pre_segs>0.2)
@@ -125,8 +129,8 @@ def val(args,epoch,net,dataloader,ii,val_len,writer,mode=0):
             f1_ave = (f1_ave * idx + f1) / (idx+1)
             print('Validation:{}/{} || Image:{}/{} || Precision/Recall/f1:{}/{}/{}'.format(epoch,args.epochs,idx,val_len,round(prec,3),round(recall,3),round(f1,3)))
 
-    print('Validation Summary:{}/{} || Average F1:{}'.format(epoch,args.epochs,round(f1_ave,3)))
-    writer.add_scalar('val_F1',f1_ave,ii)
+    print('Validation Summary:{}/{} || Average loss:{}'.format(epoch,args.epochs,round(f1_ave,3)))
+    writer.add_scalar('val_loss',f1_ave,ii)
     return f1_ave
 
 if __name__ == '__main__':

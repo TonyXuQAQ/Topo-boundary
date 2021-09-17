@@ -44,6 +44,7 @@ class Environment(FrozenClass):
         self.DAgger_buffer_size = 2048
         self.DAgger_buffer = []
         self.DAgger_buffer_index = 0
+        self.init_point_set = []
         self.setup_seed(20)
 
         self._freeze()
@@ -296,6 +297,11 @@ class Environment(FrozenClass):
         self.agent.v_previous = self.agent.v_now
         self.agent.v_now = v_next
 
+    def remove_duplicate_init_points(self,v):
+        for u in self.init_point_set:
+            dis = np.linalg.norm(np.array(u)-np.array(v))
+            if dis < 10:
+                self.init_point_set.remove(u)
 
 class Agent(FrozenClass):
     def __init__(self,env):

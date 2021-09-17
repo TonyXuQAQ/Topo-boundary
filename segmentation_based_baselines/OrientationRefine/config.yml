@@ -11,7 +11,7 @@ seg:
                 # "infer_train": infer train patches with the segmentation network
                 # "infer_valid": infer valid patches with the segmentation network
                 # "infer_test": infer test patches with the segmentation network
-  load_checkpoint: './checkpoints/seg_8.pth'  # if test is True, load the checkpoint
+  load_checkpoint: './checkpoints/seg_9.pth'  # if test is True, load the checkpoint
 
 refine:
   # =========== refine_net ===============

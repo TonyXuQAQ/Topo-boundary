@@ -14,6 +14,7 @@ We also provide the implementation code (including training and inference) based
 <img src=./dataset/pic.png width="100%" height="100%">
 
 ## Update
+* Sep/17/2021 Add initial vertex prediction (under ```./graph_based_baselines/init_vertex```) and update the checkpoint of **OrientationRefine**.
 * Aug/12/2021 Fix dataset download bug.
 * Jul/2/2021 This paper is accepted and will appear on *The IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS​) 2021*.
 * Jul/2/2021 The code of **ConvBoundary** has been cleaned and released.
@@ -63,7 +64,8 @@ Topo-Boundary
 ├── dataset
 |   ├── data_split.json
 |   ├── config_dir.yml
-|   ├── get_data.bash
+|   ├── get_data_new.bash
+|   ├── get_label.bash
 |   ├── get_checkpoints.bash
 │   ├── cropped_tiff
 │   ├── labels
@@ -78,6 +80,7 @@ Topo-Boundary
 |   ├── Enhanced-iCurb
 |   ├── iCurb
 |   ├── RoadTracer
+|   ├── init_vertex
 |   └── VecRoad 
 |
 ├── segmentation_based_baselines

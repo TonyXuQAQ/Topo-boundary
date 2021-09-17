@@ -1,7 +1,7 @@
 # the dir of Topo-boundary
-docker_home_dir: /dataset/Topo-boundary/
+docker_home_dir: /data_shared/Docker/zhxu/Topo-boundary/
 # the dir of the dataset
-docker_dataset_dir: /dataset/Topo-boundary/dataset
+docker_dataset_dir: /data_shared/Docker/zhxu/Topo-boundary/dataset
 # the name of the docker image
 docker_image_name: zhxu_topoboundary
 
@@ -14,3 +14,4 @@ seq_dir: './dataset/labels/dense_seq' # gt sequence directory
 sampled_seq_dir: './dataset/labels/sampled_seq' # gt sampled sequence directory for APLS
 inverse_dir: './dataset/labels/inverse_distance_map' # gt inverse distance mask directory
 direction_dir: './dataset/labels/direction_map' # gt direction map directory
+init_vertex_dir : './dataset/init_vertices' # predcited init_vertices

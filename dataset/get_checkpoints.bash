@@ -20,12 +20,14 @@ cp ./pretrain_checkpoints/VecRoad/* ../graph_based_baselines/VecRoad/checkpoints
 mkdir -p ../graph_based_baselines/iCurb/checkpoints
 cp ./pretrain_checkpoints/iCurb/* ../graph_based_baselines/iCurb/checkpoints/
 
-# mkdir -p ../graph_based_baselines/DAGMapper/checkpoints
-# cp ./pretrain_checkpoints/DAGMapper/* ../graph_based_baselines/DAGMapper/checkpoints/
+mkdir -p ../graph_based_baselines/DAGMapper/checkpoints
+cp ./pretrain_checkpoints/DAGMapper/* ../graph_based_baselines/DAGMapper/checkpoints/
 
-# mkdir -p ../graph_based_baselines/ConvBoundary/checkpoints
-# cp ./pretrain_checkpoints/ConvBoundary/* ../graph_based_baselines/ConvBoundary/checkpoints/
+mkdir -p ../graph_based_baselines/ConvBoundary/checkpoints
+cp ./pretrain_checkpoints/ConvBoundary/* ../graph_based_baselines/ConvBoundary/checkpoints/
 
 mkdir -p ../graph_based_baselines/Enhanced-iCurb/checkpoints
 cp ./pretrain_checkpoints/Enhanced-iCurb/* ../graph_based_baselines/Enhanced-iCurb/checkpoints/
 
+mkdir -p ../graph_based_baselines/initial_vertex/checkpoints
+cp ./pretrain_checkpoints/initial_vertex/* ../graph_based_baselines/initial_vertex/checkpoints/

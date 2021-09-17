@@ -18,4 +18,4 @@ Despite the weaknesses, this category of methods receives more and more attentio
 
 ## Note
 * At this stage, the graph-based baselines are not implemented with multi-GPU or multi-process to accelerate, which may be done in the future.
-* For a fair comparison, ground-truth initial vertices are used to start the iterative graph generation.
+* For a fair comparison, ground-truth initial vertices are used to start the iterative graph generation. (**Updated Sep/17/2021:** we provide the code for initial vertices prediction, and Enhanced-iCurb could be tested with predicted initial vertices. Please see ```./init_vertex```.)

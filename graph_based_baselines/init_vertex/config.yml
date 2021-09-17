@@ -1,0 +1,18 @@
+# device 
+device: 'cuda:0'
+
+# training params
+epochs: 20 # number of epochs
+batch_size: 1 # batch size to train with the buffer data
+lr_rate: 0.0001 # learning rate
+weight_decay: 0.00001 
+
+# test
+test: False # whether run test
+
+# dirs
+checkpoints_dir: './checkpoints/'
+# docker 
+docker_sub_dir: /graph_based_baselines/init_vertex
+docker_container_name: topo_init_vertex
+docker_port_number: 5012

@@ -4,7 +4,8 @@
 ├── dataset
 |   ├── data_split.json
 |   ├── config_dir.yml
-|   ├── get_data.bash
+|   ├── get_data_new.bash
+|   ├── get_label.bash
 |   ├── get_checkpoints.bash
 │   ├── cropped_tiff
 │   ├── labels
@@ -14,20 +15,20 @@
 
 **Detailed data definition and structure can be found in the [supplementray document](./topoboundary_supplementary.pdf).**
 
-## Dataset Download (Duplicated! Data download method updated!! See the next section!!)
-Download and unzip ~~```cropped_tiff```~~ and ```labels``. All the data are stored in Google Drive. To download all the data, run
-```
+## ~~Dataset Download (Duplicated! Data download method updated!! See the next section!!)~~
+~~Download and unzip ```cropped_tiff``` and ```labels``. All the data are stored in Google Drive. To download all the data, run~~
+<!-- ```
 # install gdown
 pip install gdown
 # optional 
 chmod +x ./get_data.bash
 # download and unzip the data from Google Drive
 ./get_data.bash
-```
-In case the script fails, you can download and unzip the data manually ~~[aerial image data](https://drive.google.com/file/d/1xasG1LEeBuB-MmdiMGaX1jgZN8ThW3Jd/view?usp=sharing)~~, [labels](https://drive.google.com/file/d/1XoAjhkwbO6IaYURikrKteA17NVlLoyf8/view?usp=sharing).
+``` -->
+~~In case the script fails, you can download and unzip the data manually [aerial image data](https://drive.google.com/file/d/1xasG1LEeBuB-MmdiMGaX1jgZN8ThW3Jd/view?usp=sharing), [labels](https://drive.google.com/file/d/1XoAjhkwbO6IaYURikrKteA17NVlLoyf8/view?usp=sharing).~~
 
-## New Dataset Download Method (Not fully verified)
-Latest update : Aug/12/2021
+## New Dataset Download Method 
+Latest update : Sep/17/2021
 
 Since Google drive has restrictions on download bandwidth, ```cropped_tiff``` is blocked for free download frequently. This issue may be caused by the huge size of ```cropped_tiff```. Currently, a **new** data preparation script is provided. Run 
 ```
@@ -37,7 +38,7 @@ Since Google drive has restrictions on download bandwidth, ```cropped_tiff``` is
 ./get_data.bash
 ```
 In this script, we directly download the raw aerial image data from NYC database and conduct a set of processings to obtain tiff images that we need. It may takes some time for download and processing.
-The script should be able to work properly, but it has not been fully verified at this stage. Report bugs in issue if necessary. Our team will try our best to fix them. More test will be conducted in the future.
+<!-- The script should be able to work properly, but it has not been fully verified at this stage. Report bugs in issue if necessary. Our team will try our best to fix them. More test will be conducted in the future. -->
 
 **Note**: Other data (e.g., labels and checkpoints) should be able to be downloaded from Google drive properly.
 
@@ -48,6 +49,17 @@ pip install pylibjpeg-openjpeg
 pip uninstall pillow
 pip install pillow
 ```
+## Data label download
+Download and unzip ```labels``. All the data are stored in Google Drive. To download all the data, run
+```
+# install gdown
+pip install gdown
+# optional 
+chmod +x ./get_data.bash
+# download and unzip the label from Google Drive
+./get_label.bash
+```
+In case the script fails, you can download and unzip the data manually [labels](https://drive.google.com/file/d/1XoAjhkwbO6IaYURikrKteA17NVlLoyf8/view?usp=sharing).
 
 ## Dataset splitting
  ```data_split.json``` defines how the dataset is split into pretrain/train/valid/test. They are randomly split. It is recommended to use our provided data splitting file.

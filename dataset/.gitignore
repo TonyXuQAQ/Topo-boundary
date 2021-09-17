@@ -1,0 +1,12 @@
+*
+!data_split.json
+!get_label.bash
+!get_data_new.bash
+!get_checkpoints.bash
+!README.md
+!scripts/
+!scripts/*
+# !config_dir.yml
+!pic.png
+!topoboundary_supplementary.pdf
+!.gitignore

@@ -1,6 +1,7 @@
 from arguments import get_parser, update_dir
 from main_train import run_train
 from main_val import run_val
+from main_test import run_test
 from main_env import Environment
 import time
 
@@ -18,7 +19,7 @@ def main():
     if args.test:
         time_start = time.time()
         env.network.val_mode()
-        run_val(env,0)
+        run_test(env)
         print('Testing time usage: {}h'.format(round((time.time()-time_start)/3600,3)))
     else:
         for epoch in range(args.epochs):
