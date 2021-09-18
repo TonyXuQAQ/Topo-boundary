@@ -9,14 +9,15 @@ from scipy.spatial import cKDTree
 
 def process(pre_keypoint_map,name):
     
-    prob_labels = measure.label(pre_keypoint_map!=0, connectivity=2)
+    prob_labels = measure.label(pre_keypoint_map>10, connectivity=2)
+    # print(name)
+    # Image.fromarray(((pre_keypoint_map>15)*255).astype(np.uint8)).convert('RGB').save('./test.png')                                                                                                                                    
     props = measure.regionprops(prob_labels)
-    max_area = 20
+    max_area = 5
     init_vertices = []
     for index, region in enumerate(props):
-        if region.area >= max_area:
-            v = region.centroid
-            init_vertices.append([int(v[0]),int(v[1])])
+        v = region.centroid
+        init_vertices.append([int(v[0]),int(v[1])])
         
     with open(f'./records/endpoint/vertices/{name}.json','w') as jf:
         json.dump(init_vertices,jf)
@@ -28,3 +29,4 @@ with tqdm(total=len(image_list), unit='img') as pbar:
         image = np.array(Image.open(os.path.join(image_dir,image_name)))[:,:,0]
         process(image,image_name[:-4])
         pbar.update()
+        # break

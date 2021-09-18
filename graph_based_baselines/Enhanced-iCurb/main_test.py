@@ -76,7 +76,7 @@ def run_test(env):
             with torch.no_grad():
                 fpn_feature_map = network.encoder(tiff)
                 # pre_seg_mask = network.decoder_seg(fpn_feature_map)
-                fpn_feature_map = F.interpolate(fpn_feature_map, size=(1100, 1100), mode='bilinear', align_corners=True)
+                fpn_feature_map = F.interpolate(fpn_feature_map, size=(1000, 1000), mode='bilinear', align_corners=True)
                 fpn_feature_tensor = fpn_feature_map#torch.cat([tiff,fpn_feature_map],dim=1)
                 
             # record generated vertices
@@ -94,9 +94,9 @@ def run_test(env):
                         # network predictions
                         cropped_feature_tensor = agent.crop_attention_region(fpn_feature_tensor,val_flag=True)
                         with torch.no_grad():
-                            v_now = [x/1100 for x in agent.v_now]
+                            v_now = [x/1000 for x in agent.v_now]
                             v_now = torch.FloatTensor(v_now).unsqueeze(0).to(args.device)
-                            v_previous = [x/1100 for x in agent.v_previous]
+                            v_previous = [x/1000 for x in agent.v_previous]
                             v_previous = torch.FloatTensor(v_previous).unsqueeze(0).to(args.device)
                             pre_stop_action = network.decoder_stop(cropped_feature_tensor,v_now,v_previous)
                             pre_coord = network.decoder_coord(cropped_feature_tensor,v_now,v_previous)
