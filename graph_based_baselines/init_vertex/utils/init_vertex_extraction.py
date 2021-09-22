@@ -7,6 +7,17 @@ import json
 from tqdm import tqdm
 from scipy.spatial import cKDTree
 
+def trans_v(v):
+    if v[0] < 10:
+        v[0] = 0
+    elif v[0] >= 990:
+        v[0] = 999
+
+    if v[1] < 10:
+        v[1] = 0
+    elif v[1] >= 990:
+        v[1] = 999
+
 def process(pre_keypoint_map,name):
     
     prob_labels = measure.label(pre_keypoint_map>10, connectivity=2)
@@ -17,6 +28,7 @@ def process(pre_keypoint_map,name):
     init_vertices = []
     for index, region in enumerate(props):
         v = region.centroid
+        # trans_v(v)
         init_vertices.append([int(v[0]),int(v[1])])
         
     with open(f'./records/endpoint/vertices/{name}.json','w') as jf:

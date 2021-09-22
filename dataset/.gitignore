@@ -6,7 +6,7 @@
 !README.md
 !scripts/
 !scripts/*
-# !config_dir.yml
+!config_dir.yml
 !pic.png
 !topoboundary_supplementary.pdf
 !.gitignore

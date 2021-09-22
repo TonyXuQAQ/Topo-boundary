@@ -35,9 +35,9 @@ def update_dir(args):
     check_and_add_dir('./records/train/vis/restricted_exploration',clear=True)
     check_and_add_dir('./records/valid/vis',clear=True)
     check_and_add_dir('./records/valid/vertices_record',clear=True)
-    check_and_add_dir('./records/test/skeleton',clear=True)
-    check_and_add_dir('./records/test/graph',clear=True)
+    check_and_add_dir('./records/test/skeleton')
+    check_and_add_dir('./records/test/graph')
     check_and_add_dir('./records/test/final_vis')
-    check_and_add_dir('./records/test/vertices_record',clear=True)
+    check_and_add_dir('./records/test/vertices_record')
 
 

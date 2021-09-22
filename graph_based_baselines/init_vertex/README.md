@@ -44,3 +44,8 @@ Run
 ```
 ./run_eval.bash
 ```
+
+## Evaluation
+After we obtain the initial vertices, we directly use the Enhanced-iCurb checkpoints to run the test. The results are inferior to its results with GT initial vertices. One possible explanation could be that we did not fine tune and retrain models. The results could be further improved by using more powerful initial vertex segmentation backbone or add human users in the loop.
+
+<img src=./utils/results.png width="50%" height="50%">

@@ -15,3 +15,4 @@ sampled_seq_dir: './dataset/labels/sampled_seq' # gt sampled sequence directory 
 inverse_dir: './dataset/labels/inverse_distance_map' # gt inverse distance mask directory
 direction_dir: './dataset/labels/direction_map' # gt direction map directory
 init_vertex_dir : './dataset/init_vertices' # predcited init_vertices
+endpoint_dir: './dataset/labels/endpoint_map' # gt end point map directory

@@ -26,9 +26,9 @@ class dataset(Dataset):
     def __init__(self,args,valid=False):
         # train the network with pretrain patches
         with open('./dataset/data_split.json','r') as jf:
-            json_list = json.load(jf)['pretrain']
-        
-        self.file_list = json_list
+            json_list = json.load(jf)
+                
+        self.file_list = json_list['pretrain'] + json_list['train']
         self.tiff_list = [os.path.join(args.image_dir,'{}.tiff'.format(x)) for x in self.file_list]
         self.mask_list = [os.path.join(args.mask_dir,'{}.png'.format(x)) for x in self.file_list]
         self.endpoint_list = [os.path.join(args.endpoint_dir,'{}.png'.format(x)) for x in self.file_list]
@@ -149,9 +149,10 @@ if __name__ == '__main__':
     # network
     net = FPN()
     net.to(device=device)
-    optimizor = torch.optim.Adam(list(net.parameters()),lr=1e-4)
+    optimizor = torch.optim.Adam(list(net.parameters()),lr=1e-3)
     criterion = {'bce':nn.BCEWithLogitsLoss()}
     writer = SummaryWriter('./records/seg/tensorboard')
+    # net.load_state_dict(torch.load('./checkpoints/seg_pretrain.pth'))
     
     for i in range(args.epochs):
         train(args,i,net,train_dataloader,train_len,optimizor,criterion,writer,valid_dataloader,valid_len)
