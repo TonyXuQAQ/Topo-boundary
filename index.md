@@ -29,12 +29,15 @@ For any questions, please send email to zxubg at connect dot ust dot hk.
 
 ### Citation
 ```
-@article{xu2021topo,
-  title={Topo-boundary: A Benchmark Dataset on Topological Road-boundary Detection Using Aerial Images for Autonomous Driving},
-  author={Xu, Zhenhua and Sun, Yuxiang and Liu, Ming},
-  journal={arXiv preprint arXiv:2103.17119},
-  year={2021}
-}
+@ARTICLE{9488209,  
+  author={Xu, Zhenhua and Sun, Yuxiang and Liu, Ming},  
+  journal={IEEE Robotics and Automation Letters},   
+  title={Topo-Boundary: A Benchmark Dataset on Topological Road-Boundary Detection Using Aerial Images for Autonomous Driving},   
+  year={2021},  
+  volume={6},  
+  number={4},  
+  pages={7248-7255},  
+  doi={10.1109/LRA.2021.3097512}}
 
 @article{xu2021icurb,
   title={iCurb: Imitation Learning-Based Detection of Road Curbs Using Aerial Images for Autonomous Driving},
