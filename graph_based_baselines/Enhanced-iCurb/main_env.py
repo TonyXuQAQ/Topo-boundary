@@ -463,8 +463,8 @@ class Network(FrozenClass):
 
     def save_checkpoints(self,i):
         print('Saving checkpoints {}.....'.format(i))
-        torch.save(self.decoder_coord.state_dict(), "./records/checkpoints/decoder_nodis_coord_best.pth")
-        torch.save(self.decoder_stop.state_dict(), "./records/checkpoints/decoder_nodis_flag_best.pth")
+        torch.save(self.decoder_coord.state_dict(), "./checkpoints/decoder_nodis_coord_best.pth")
+        torch.save(self.decoder_stop.state_dict(), "./checkpoints/decoder_nodis_flag_best.pth")
 
 
     def DAgger_collate(self,batch):

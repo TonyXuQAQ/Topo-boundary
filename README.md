@@ -14,7 +14,7 @@ We also provide the implementation code (including training and inference) based
 <img src=./dataset/pic.png width="100%" height="100%">
 
 ## Update
-* Oct/1/2021 **Attention!!!!** Serious problems of the Google drive is found. Now the download links are not available. We will try to solve it ASAP.
+* Oct/1/2021 Fix google drive link issue. The label and checkpoints should be able to be normally downloaded.
 * Sep/17/2021 Add initial vertex prediction (under ```./graph_based_baselines/init_vertex```) and update the checkpoint of **OrientationRefine**.
 * Aug/12/2021 Fix dataset download bug.
 * Jul/2/2021 This paper is accepted and will appear on *The IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS​) 2021*.
