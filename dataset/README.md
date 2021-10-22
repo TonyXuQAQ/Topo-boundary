@@ -89,4 +89,4 @@ We provide the saved checkpoints of our implementations. Run
 ```
 ./get_checkpoints.bash
 ```
-to download them, and the checkpoints are saved in ```./pretrain_checkpoints```. Checkpoints are copied to corresponding baseline folders automatically. You can also download it manually [pretrain checkpoints](https://drive.google.com/file/d/1CKYPbUmVJkDXX5Kh4amFnrHjT9ZbozKk/view?usp=sharing).
+to download them, and the checkpoints are saved in ```./pretrain_checkpoints```. Checkpoints are copied to corresponding baseline folders automatically. You can also download it manually [pretrain checkpoints](https://drive.google.com/file/d/1GdW8c2AGP87e7srd9hjbisxkb-TbWzCn/view?usp=sharing).
