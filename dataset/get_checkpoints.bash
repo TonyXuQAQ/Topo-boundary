@@ -1,4 +1,4 @@
-gdown https://drive.google.com/uc?id=1CKYPbUmVJkDXX5Kh4amFnrHjT9ZbozKk
+gdown https://drive.google.com/uc?id=1GdW8c2AGP87e7srd9hjbisxkb-TbWzCn
 unzip -d ./ pretrain_checkpoints.zip
 rm -rf y./pretrain_checkpoints.zip
 
