@@ -266,7 +266,7 @@ def entropy_conn(name_in):
                 if np.max(votes_summary):
                     vote_result = np.where(votes_summary==np.max(votes_summary))[0][0]
                     # the length of the pre-instance assigned to corresponding gt-instance 
-                    gt_assigned_lengths[vote_result].append(len(instance_points[0]))
+                    gt_assigned_lengths[vote_result].append(len(instance_points))
                     # calculate projection of the predicted instance to corresponding gt-instance
                     instance_tree = cKDTree(gt_instance_points[vote_result])
                     _, iis = instance_tree.query(instance_points,k=[1])
