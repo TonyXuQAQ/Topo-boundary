@@ -10,4 +10,4 @@
 !pic.png
 !topoboundary_supplementary.pdf
 !.gitignore
-!label_generation_untested
+!label_generation_untested/processing.py
