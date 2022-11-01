@@ -13,6 +13,9 @@ We also provide the implementation code (including training and inference) based
 
 <img src=./dataset/pic.png width="100%" height="100%">
 
+## New models
+You could try our latest proposed work [RNGDet++](https://github.com/TonyXuQAQ/RNGDetPlusPlus), which is much more powerful and flexible than iCurb.
+
 ## Update
 * Oct/1/2021 Fix google drive link issue. The label and checkpoints should be able to be normally downloaded.
 * Sep/17/2021 Add initial vertex prediction (under ```./graph_based_baselines/init_vertex```) and update the checkpoint of **OrientationRefine**.
