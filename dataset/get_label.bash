@@ -2,7 +2,7 @@
 # unzip -d ./ cropped_tiff.zip
 # rm -rf ./cropped_tiff.zip
 
-gdown https://drive.google.com/uc?id=150MOOBWSlTFwSrwDTAyA9Q_OrgN6QjdL
+gdown https://drive.google.com/uc?id=1smzVvcOQ24uzsqya3Lh2LaiBwgP3fH6N
 unzip -d ./ labels.zip
 rm -rf ./labels.zip
 
