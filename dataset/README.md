@@ -59,7 +59,7 @@ chmod +x ./get_data.bash
 # download and unzip the label from Google Drive
 ./get_label.bash
 ```
-In case the script fails, you can download and unzip the data manually [labels](https://drive.google.com/file/d/150MOOBWSlTFwSrwDTAyA9Q_OrgN6QjdL/view?usp=sharing).
+**In case the script fails, you can download and unzip the data manually [labels](https://drive.google.com/file/d/19Ti2Y-tE2Pw027Vsk2egvMJ0bkfM1ANQ/view?usp=sharing).**
 
 ## Dataset splitting
  ```data_split.json``` defines how the dataset is split into pretrain/train/valid/test. They are randomly split. It is recommended to use our provided data splitting file.
@@ -89,4 +89,4 @@ We provide the saved checkpoints of our implementations. Run
 ```
 ./get_checkpoints.bash
 ```
-to download them, and the checkpoints are saved in ```./pretrain_checkpoints```. Checkpoints are copied to corresponding baseline folders automatically. You can also download it manually [pretrain checkpoints](https://drive.google.com/file/d/14Le0WGmePcFDOfVOaNfd6TPTUxKONGAr/view?usp=sharing).
+to download them, and the checkpoints are saved in ```./pretrain_checkpoints```. Checkpoints are copied to corresponding baseline folders automatically. **If the script cannot run, you can also download it manually [pretrain checkpoints](https://drive.google.com/file/d/1ijgnesWfvx5SfcuD68T5s8Lbr4ZclZ0R/view?usp=sharing).**
