@@ -1,4 +1,4 @@
-# Topo-boundary
+# [RAL 2022] Topo-boundary
 This is the official github repo of paper [Topo-boundary: A Benchmark Dataset on Topological Road-boundary Detection Using Aerial Images for Autonomous Driving](https://arxiv.org/abs/2103.17119). 
 
 [Project page](https://tonyxuqaq.github.io/Topo-boundary/).
